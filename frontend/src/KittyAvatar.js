@@ -24,6 +24,7 @@ const IMAGES = {
     `${process.env.PUBLIC_URL}/assets/KittyAvatar/accessorie_20.png`
   ],
   body: [
+    `${process.env.PUBLIC_URL}/assets/KittyAvatar/check.jpg`,
     `${process.env.PUBLIC_URL}/assets/KittyAvatar/body_1.png`,
     `${process.env.PUBLIC_URL}/assets/KittyAvatar/body_2.png`,
     `${process.env.PUBLIC_URL}/assets/KittyAvatar/body_3.png`,
@@ -97,7 +98,7 @@ const dnaToAttributes = dna => {
 
 const KittyAvatar = props => {
   const outerStyle = { height: '160px', position: 'relative', width: '50%' };
-  const innerStyle = { height: '150px', position: 'absolute', top: '3%', left: '50%' };
+  const innerStyle = {  position: 'absolute', top: '3%', left: '2%',width:'280px'};
   const { dna } = props;
 
   if (!dna) return null;
@@ -105,10 +106,7 @@ const KittyAvatar = props => {
   const cat = dnaToAttributes(dna);
   return <div style={outerStyle}>
     <img alt='body' src={cat.body} style={innerStyle} />
-    <img alt='fur' src={cat.fur} style={innerStyle} />
-    <img alt='mouth' src={cat.mouth} style={innerStyle} />
-    <img alt='eyes' src={cat.eyes} style={innerStyle} />
-    <img alt='accessory' src={cat.accessory} style={innerStyle} />
+
   </div>;
 };
 

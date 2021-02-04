@@ -26,9 +26,9 @@ const TransferModal = props => {
 
   return <Modal onClose={() => setOpen(false)} onOpen={() => setOpen(true)} open={open}
     trigger={<Button basic color='blue'>转让</Button>}>
-    <Modal.Header>毛孩转让</Modal.Header>
+    <Modal.Header>转让</Modal.Header>
     <Modal.Content><Form>
-      <Form.Input fluid label='毛孩 ID' readOnly value={kitty.id} />
+      <Form.Input fluid label='ID' readOnly value={kitty.id} />
       <Form.Input fluid label='转让对象' placeholder='对方地址' onChange={formChange('target')} />
     </Form></Modal.Content>
     <Modal.Actions>
@@ -90,14 +90,15 @@ const KittyCards = props => {
               <KittyCard dna={item.dna} ></KittyCard>
               <Divider />
 
-              <div>ID号：{idx}</div>
-              <div>基因：</div>
+              <div>ID号：{item.id}</div>
+              <div>唯一编码：</div>
               <div style={inlineText}>{item.dna}</div>
-              <div>主人：</div>
+              <div>拥有者：</div>
               <div style={inlineText}>{item.owner}</div>
               <div>面值：</div>
-              <div style={inlineText}>{item.price}</div>
-
+              <div style={inlineText}>{item.price} 元</div>
+              <div>父编码：</div>
+              <div style={inlineText}>{item.preDna}</div>
               <Divider />
               <div style={textCenter}>
                 <TransferModal kitty={item} accountPair={accountPair} setStatus={setStatus} />
