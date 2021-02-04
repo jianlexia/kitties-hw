@@ -13,9 +13,9 @@ export default function Kitties(props) {
   const [kittyCnt, setKittyCnt] = useState(0);
   const [kittyDNAs, setKittyDNAs] = useState([]);
   const [kittyOwners, setKittyOwners] = useState([]);
-  const [kittyPrices, setKittyPrices] = useState([]);
   const [kitties, setKitties] = useState([]);
   const [status, setStatus] = useState('');
+  const [kittyPrices, setKittyPrices] = useState([]);
 
   const fetchKittyCnt = () => {
     /* TODO: 加代码，从 substrate 端读取数据过来1 2*/
@@ -35,9 +35,6 @@ export default function Kitties(props) {
         if (row.isNone) {
           tempData.push('猫不存在');
         } else {
-          //Option 转字符串
-          //hash.toJSON() 或 hash.toHuman() 
-          //value.toJSON() 或 value.toHuman()
           let kittyOwner = row.value.toHuman();
 
           tempData.push(kittyOwner);
@@ -57,12 +54,29 @@ export default function Kitties(props) {
           tempData.push('no kitty');
         } else {
           let kittyDna = row.value.toHuman();
-          console.log("dna == " + kittyDna);
           tempData.push(kittyDna);
         }
       })
       setKittyDNAs(tempData);
  
+    })
+  }
+
+  const fetchKittiesPrice = (kCnt) => {
+    api.query.kittiesModule.priceAmount.multi([...Array(kCnt).keys()], (data) => {
+      let tempData = [];
+      data.map(row => {
+
+        let price = 0;
+        if (null != row && null != row.words)
+        {
+            price = row.words;
+        }
+        tempData.push(price[0]);
+        
+      })
+      setKittyPrices(tempData);
+     
     })
   }
 
@@ -74,7 +88,8 @@ export default function Kitties(props) {
       kittiesAllInfo.push({
         id: idx,
         dna: kittyDNAs[idx],
-        owner: kittyOwners[idx]
+        owner: kittyOwners[idx],
+        price:kittyPrices[idx]
       })
     }
 
@@ -82,8 +97,8 @@ export default function Kitties(props) {
   };
 
   useEffect(fetchKittyCnt, [api, keyring]);
-  useEffect(fetchKitties, [api, kittyDNAs, kittyOwners]);
-  useEffect(fetchKittiesOwner, [api, kittyDNAs, kittyOwners]);
+  useEffect(fetchKitties, [api, kittyCnt]);
+  useEffect(fetchKittiesOwner, [api, kittyCnt]);
   useEffect(populateKitties, [kittyDNAs, kittyOwners]);
 
   return <Grid.Column width={16}>

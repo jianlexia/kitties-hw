@@ -6,5 +6,6 @@
   "KittyLinkedItem": {
     "prev": "Option<u32>",
     "next": "Option<u32>"
-  }
+  },
+  "KittyAmount":"u32"
 }

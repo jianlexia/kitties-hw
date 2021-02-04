@@ -95,6 +95,8 @@ const KittyCards = props => {
               <div style={inlineText}>{item.dna}</div>
               <div>主人：</div>
               <div style={inlineText}>{item.owner}</div>
+              <div>面值：</div>
+              <div style={inlineText}>{item.price}</div>
 
               <Divider />
               <div style={textCenter}>
