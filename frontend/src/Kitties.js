@@ -19,6 +19,9 @@ export default function Kitties(props) {
   const [status, setStatus] = useState('');
   const [kittyPrices, setKittyPrices] = useState([]);//
   const [preDNAs, setPreDNAs] = useState([]);
+  const [creaters, setCreaters] = useState([]);//setIsValids
+  const [isInvalids, setIsInvalids] = useState([]);
+  
 
   const fetchKittyCnt = () => {
     /* TODO: 加代码，从 substrate 端读取数据过来1 2*/
@@ -79,7 +82,33 @@ export default function Kitties(props) {
         }
       })
       setKittyDNAs(tempData);
-    })
+    });
+    api.query.kittiesModule.ticketCreater.multi([...Array(kittyCnt).keys()], (data) => {
+      let tempData = [];
+      data.map(row => {
+        if (row.isNone) {
+          tempData.push(' ');
+        } else {
+          let creater = row.value.toHuman();
+          tempData.push(creater);
+        }
+      })
+      setCreaters(tempData);
+    });
+
+    api.query.kittiesModule.isInvalid.multi([...Array(kittyCnt).keys()], (data) => {
+      let tempData = [];
+      data.map(row => {
+        if (row.isNone) {
+          tempData.push(false);
+        } else {
+          let invalid = row.value.toHuman();
+          tempData.push(invalid);
+        }
+      })
+      console.log("invalid ==", tempData);
+      setIsInvalids(tempData);
+    });
   }
 
   const fetchKittiesPrice = () => {
@@ -102,7 +131,6 @@ export default function Kitties(props) {
     /* TODO: 加代码，从 substrate 端读取数据过来 */
     let kittiesAllInfo = [];
 
-    console.log("again===");
     for (let idx = 0; idx < kittyCnt; idx++) {
       if(accountPair.address == kittyOwners[idx])
       {
@@ -112,6 +140,8 @@ export default function Kitties(props) {
         owner: kittyOwners[idx],
         price:kittyPrices[idx],
         preDna:preDNAs[idx],
+        creater:creaters[idx],
+        invalid:isInvalids[idx]
         })
       }
       
@@ -136,12 +166,12 @@ export default function Kitties(props) {
     <Form style={{ margin: '1em 0' }}>
       <Form.Field style={{ textAlign: 'center' }}>
         <TxButton
-          accountPair={accountPair} label='创建小毛孩' type='SIGNED-TX' setStatus={setStatus}
+          accountPair={accountPair} label='create ticket' type='SIGNED-TX' setStatus={setStatus}
           attrs={{
             palletRpc: 'kittiesModule',
             callable: 'create',
-            inputParams: [],
-            paramFields: []
+            inputParams: [100],
+            paramFields: ['price']
           }}
         />
       </Form.Field>

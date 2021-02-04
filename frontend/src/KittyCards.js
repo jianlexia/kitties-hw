@@ -47,6 +47,7 @@ const TransferModal = props => {
   </Modal>;
 };
 
+
 // --- About Kitty Card ---
 
 const KittyCard = props => {
@@ -75,6 +76,7 @@ const KittyCards = props => {
   const textCenter = { textAlign: "center" };
   const inlineText = { wordBreak: "break-all", color: "#999" }
   const tagStyle = { position: "absolute", right: "-30px", top: "-10px", borderRadius: "3px" }
+  const tagStyle2 = { position: "absolute", right: "-30px", top: "20px", borderRadius: "3px" }
   /* TODO: 加代码。这里会枚举所有的 `KittyCard` */
   return (
     <Row justify="space-between">
@@ -87,6 +89,10 @@ const KittyCards = props => {
                   <Tag style={tagStyle} color="#2db7f5">我的</Tag>
                   : null
               }
+              {
+                item.invalid ? <Tag style={tagStyle2} color="#b3b3b3">失效</Tag>
+                  : null
+              }
               <KittyCard dna={item.dna} ></KittyCard>
               <Divider />
 
@@ -95,10 +101,14 @@ const KittyCards = props => {
               <div style={inlineText}>{item.dna}</div>
               <div>拥有者：</div>
               <div style={inlineText}>{item.owner}</div>
+              <div>出票人：</div>
+              <div style={inlineText}>{item.creater}</div>
               <div>面值：</div>
               <div style={inlineText}>{item.price} 元</div>
               <div>父编码：</div>
               <div style={inlineText}>{item.preDna}</div>
+              <div>是否失效：</div>
+              <div style={inlineText}>{item.invalid?'是':'否'}</div>
               <Divider />
               <div style={textCenter}>
                 <TransferModal kitty={item} accountPair={accountPair} setStatus={setStatus} />
