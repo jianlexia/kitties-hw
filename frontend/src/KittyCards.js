@@ -3,10 +3,79 @@ import { Card, Grid, Message, Modal, Form, Label } from 'semantic-ui-react';
 
 import KittyAvatar from './KittyAvatar';
 import { TxButton } from './substrate-lib/components';
+import axios from 'axios';
 
 import { Button, Row, Col, Divider, Tag } from "antd";
 import "antd/dist/antd.css";
+//var request = require('request');
 // --- About Modal ---
+
+function TicketEvents(props){
+  const [ticketEvents, setTicketEvents] = React.useState([]);
+  React.useEffect(()=>{
+       /* 请求数据交互 */
+       const { kitty} = props;
+        var items;
+        var apiUrl = 'http://127.0.0.1:8080/ticketHis/' + kitty.id;
+        console.log("apiUrl = ", apiUrl);
+
+        axios({ method: 'get', url: `${apiUrl}` })
+          .then(response => {
+              console.log(response.data);
+              var arrEval = eval(response.data);
+              console.log("type = ", typeof(response.data));
+              typeof(response.data);
+              //JSON.parse( response.data );
+              setTicketEvents(arrEval);
+          })
+          .catch((error)=> {
+          console.log(error);
+          });
+
+
+    },[]);
+
+    return <div>
+            {
+                ticketEvents.map((element,index) => {
+                    return (
+                        <li key={index}>{element}</li>
+                    )
+                })
+            }
+          </div>
+
+
+}
+
+
+
+
+const HisModal = props =>{
+  const { kitty, accountPair, setStatus } = props;
+
+  // request('http://127.0.0.1', function (error, response, body) {
+  //     if (!error && response.statusCode == 200) {
+  //         console.log(response);
+  //         console.log(body); // Print the google web page.
+  //      }
+  // })
+
+
+
+//https://blog.csdn.net/weixin_43363871/article/details/88857235
+
+
+  const [open, setOpen] = React.useState(false);
+  return <Modal onClose={() => setOpen(false)} onOpen={() => setOpen(true)} open={open}
+    trigger={<Button basic color='blue'>记录</Button>}>
+    <Modal.Header>历史记录</Modal.Header>
+    <Modal.Content><Form>
+      <TicketEvents kitty={kitty}></TicketEvents>     
+    </Form></Modal.Content>
+    
+  </Modal>;
+}
 
 const TransferModal = props => {
   const { kitty, accountPair, setStatus } = props;
@@ -112,6 +181,9 @@ const KittyCards = props => {
               <Divider />
               <div style={textCenter}>
                 <TransferModal kitty={item} accountPair={accountPair} setStatus={setStatus} />
+              </div>
+              <div style={textCenter}>
+                <HisModal kitty={item} accountPair={accountPair} setStatus={setStatus} />
               </div>
             </Col>
           )

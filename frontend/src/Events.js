@@ -23,10 +23,14 @@ function Main (props) {
           const { event, phase } = record;
           const types = event.typeDef;
 
+          console.log("type = ",JSON.stringify(types));
+          
+
           // show what we are busy with
           const eventName = `${event.section}:${
             event.method
           }:: (phase=${phase.toString()})`;
+          
 
           if (FILTERED_EVENTS.includes(eventName)) return;
 
@@ -35,12 +39,18 @@ function Main (props) {
             (data, index) => `${types[index].type}: ${data.toString()}`
           );
 
+
           setEventFeed(e => [{
             icon: 'bell',
             summary: `${eventName}-${e.length}`,
             extraText: event.meta.documentation.join(', ').toString(),
             content: params.join(', ')
           }, ...e]);
+          debugger;
+        
+
+          
+
         });
       });
     };
